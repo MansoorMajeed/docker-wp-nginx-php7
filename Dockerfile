@@ -24,21 +24,27 @@ RUN sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.0/fpm/php.
 RUN sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 100M/g" /etc/php/7.0/fpm/php.ini
 RUN sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 100M/g" /etc/php/7.0/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf
+RUN sed -i -e "s|/run/php/php7.0-fpm.pid|/var/run/php/php7.0-fpm.pid/|g" /etc/php/7.0/fpm/php-fpm.conf
+RUN sed -i -e "s|/run/php/php7.0-fpm.sock|/var/run/php/php7.0-fpm.sock/|g" /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
+
 RUN find /etc/php/7.0/fpm/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;
+
+RUN mkdir -p /var/run/php
+RUN mkdir -p /var/log/php-fpm
 
 # nginx site conf
 ADD ./site.conf /etc/nginx/sites-available/default
 
-RUN apt-get install python-pip
+RUN apt-get install python-pip -y
 # Supervisor Config
-RUN /usr/bin/pip supervisor
-RUN /usr/bin/pip supervisor-stdout
+RUN /usr/bin/pip install supervisor
+RUN /usr/bin/pip install supervisor-stdout
 ADD ./supervisord.conf /etc/supervisord.conf
 
 # Install Wordpress
 ADD https://wordpress.org/latest.tar.gz /var/www/latest.tar.gz
-RUN cd /var/www && tar zxvf latest.tar.gz && rm latest.tar.gz
+RUN cd /var/www && tar zxf latest.tar.gz && rm latest.tar.gz
 RUN rm -rf /var/www/html
 RUN mv /var/www/wordpress /var/www/html
 RUN chown -R www-data:www-data /var/www/html
