@@ -38,6 +38,9 @@ If you are using a Linux distro, you may need to use the above command with `sud
  docker exec -it container_id_here bash
 ```
 
+### HELPP!!??
+If you have any questions, or need any help with it, leave a comment in my blog post [HERE](https://digitz.org/blog/wordpress-docker-nginx/)
+
 
 NOTES:
 This is heavily adapted from [HERE](https://github.com/eugeneware/docker-wordpress-nginx). Checkout his repository to see how you can use it with a local MySQL. 
