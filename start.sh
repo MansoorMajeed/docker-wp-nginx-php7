@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ ! -f /var/www/html/wp-config.php ]; then
   WORDPRESS_DB="wp_db"
-  WORDPRESS_HOST="104.131.40.4"
+  WORDPRESS_HOST="192.168.33.100"
   WORDPRESS_USER="wp_user"
   WORDPRESS_PASSWORD="db_password"
 
